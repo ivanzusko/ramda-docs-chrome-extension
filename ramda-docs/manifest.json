@@ -1,6 +1,6 @@
 {
   "name": "Ramda Docs",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Extension for easy access to Ramda documentation",
   "browser_action": {
     "default_icon": {
