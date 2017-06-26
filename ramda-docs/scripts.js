@@ -23,9 +23,27 @@ async function getData() {
   return layout;
 }
 
+function fixHeaderLinks(doc) {
+  const menuLinks = [...doc.querySelectorAll('header.navbar a')]
+    .map(a => {
+      const href = a.getAttribute('href');
+      if (/^(\/|#|\.\.)/i.test(href)) {
+        // make the relative link absolute
+        const externalHref = `http://ramdajs.com/docs/${ href.replace(/^\//, '../') }`;
+        // fix paths like '/docs/../repl' to '/repl'
+        a.setAttribute('href', externalHref.replace(/\/[^\/]+\/\.\./, ''));
+      }
+      // When clicked, open in new tab
+      a.setAttribute('target', '_blank');
+    });
+
+  return menuLinks;
+}
+
 function insertData(fn) {
   return async function (element) {
     element.innerHTML = (typeof fn === 'function') ? await fn() : fn;
     ramdaInit();
+    fixHeaderLinks(document);
   }
 }
