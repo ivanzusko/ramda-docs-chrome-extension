@@ -105,7 +105,7 @@ var ramdaInit = function() {
     var versionParam = version ? '?v=' + version : '';
     var code = event.target.nextElementSibling.textContent;
     var encoded = fixedEncodeURIComponent(code);
-    location.assign(location.origin + '/repl/' +
+    window.open('http://ramdajs.com/repl/' +
       versionParam + '#;' + encoded);
   }
 
