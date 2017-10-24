@@ -45,5 +45,28 @@ function insertData(fn) {
     element.innerHTML = (typeof fn === 'function') ? await fn() : fn;
     ramdaInit();
     fixHeaderLinks(document);
+    openInREPL(document);
   }
+}
+
+function openInREPL(doc) {
+  const buttonREPL = [...doc.querySelectorAll('button')]
+    .map(button => {
+      button.addEventListener('click', tryInREPL);
+    })
+}
+
+function tryInREPL(event) {
+  const target = event.target;
+  const isREPL = target.matches('.send-repl');
+
+  if (!isREPL) return;
+  
+  const version = event.target.dataset && event.target.dataset.ramdaVersion;
+  const versionParam = version ? '?v=' + version : '';
+  const code = codeElement.textContent;
+  const encoded = fixedEncodeURIComponent(code);
+
+  return window.open(location.origin + '/repl/' +
+    versionParam + '#;' + encoded);
 }
