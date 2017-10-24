@@ -1,4 +1,5 @@
 const output = document.getElementById('output');
+const RAMDA_SITE = 'http://ramdajs.com';
 
 chrome.storage.local.get('RLayout', data => {
   if (!!data.RLayout) {
@@ -45,15 +46,20 @@ function insertData(fn) {
     element.innerHTML = (typeof fn === 'function') ? await fn() : fn;
     ramdaInit();
     fixHeaderLinks(document);
+    fixCodeExample(document);
     openInREPL(document);
   }
 }
 
 function openInREPL(doc) {
-  const buttonREPL = [...doc.querySelectorAll('button')]
-    .map(button => {
-      button.addEventListener('click', tryInREPL);
-    })
+  [...doc.querySelectorAll('button')]
+    .map(filtration);
+}
+
+function filtration(node) {
+  if (node.matches('.run-here')) node.remove();
+
+  node.addEventListener('click', tryInREPL);
 }
 
 function tryInREPL(event) {
@@ -62,11 +68,28 @@ function tryInREPL(event) {
 
   if (!isREPL) return;
   
+  const codeElement = target.parentNode.nextElementSibling;
   const version = event.target.dataset && event.target.dataset.ramdaVersion;
   const versionParam = version ? '?v=' + version : '';
   const code = codeElement.textContent;
   const encoded = fixedEncodeURIComponent(code);
 
-  return window.open(location.origin + '/repl/' +
+  return window.open(RAMDA_SITE + '/repl/' +
     versionParam + '#;' + encoded);
+}
+
+// https://goo.gl/Zbejtc
+function fixedEncodeURIComponent(str) {
+  return encodeURIComponent(str).replace(/[!'()*]/g, function(c) {
+    return '%' + c.charCodeAt(0).toString(16);
+  });
+}
+
+function fixCodeExample(doc) {
+  [...doc.querySelectorAll('code')]
+    .map(addPadding);
+}
+
+function addPadding(element) {
+  if (element.matches('.javascript')) element.style.paddingTop = '35px';
 }
