@@ -1,6 +1,6 @@
 # Ramda Docs Chrome Extension
 
-Chrome extension for easy access to Ramda documentation.
+[Chrome extension](https://chrome.google.com/webstore/detail/ramda-docs/pglohphegkildojgiggolcilcinhdacg) for easy access to Ramda documentation.
 
 <img src="ramda-docs/ramda-logo.png" 
      width="170" height="190" align="centre" hspace="12" />
